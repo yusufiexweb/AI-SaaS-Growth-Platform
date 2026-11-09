@@ -1,0 +1,1260 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7fa">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="NOVA333X Studio — a unified digital agency performance and reporting dashboard.">
+  <title>NOVA333X — Agency Analytics</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f6f7fa;
+      --surface: #fff;
+      --surface-soft: #fafafd;
+      --sidebar: #181922;
+      --sidebar-muted: #9a9ba8;
+      --ink: #20212b;
+      --muted: #898b99;
+      --line: #e9e9ef;
+      --purple: #6f5ce8;
+      --purple-dark: #5b49d4;
+      --purple-soft: #f0edff;
+      --mint: #36b891;
+      --mint-soft: #e8f7f1;
+      --orange: #e99555;
+      --orange-soft: #fff3e8;
+      --blue: #5791ed;
+      --blue-soft: #edf4ff;
+      --red: #df6876;
+      --shadow: 0 12px 35px rgba(34, 33, 54, .055);
+      --radius: 14px;
+      --sidebar-width: 248px;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --page: #12131a;
+      --surface: #1b1d27;
+      --surface-soft: #222430;
+      --sidebar: #15161e;
+      --sidebar-muted: #a4a5b1;
+      --ink: #eeedf5;
+      --muted: #a2a3b0;
+      --line: #30323e;
+      --purple: #a496ff;
+      --purple-dark: #8c7af5;
+      --purple-soft: #302b48;
+      --mint: #58c9a2;
+      --mint-soft: #20372f;
+      --orange: #efa66b;
+      --orange-soft: #3c2d22;
+      --blue: #79a8f3;
+      --blue-soft: #222f46;
+      --red: #f27b88;
+      --shadow: 0 14px 36px rgba(0, 0, 0, .24);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: var(--page); }
+    body {
+      min-width: 320px;
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font: 13px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .22s ease, color .22s ease;
+    }
+    button, select, input { font: inherit; }
+    button, a, select { -webkit-tap-highlight-color: transparent; }
+    button { color: inherit; cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible {
+      outline: 3px solid rgba(111, 92, 232, .38);
+      outline-offset: 3px;
+    }
+    .icon { width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .app { min-height: 100vh; }
+
+    .sidebar {
+      position: fixed;
+      z-index: 40;
+      inset: 0 auto 0 0;
+      width: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+      padding: 21px 15px 16px;
+      background: var(--sidebar);
+      color: #fff;
+      transition: transform .24s ease;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand-symbol {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 11px;
+      background: linear-gradient(145deg, #8272fa, #5545cc);
+      box-shadow: 0 5px 16px rgba(111,92,232,.28);
+      color: white;
+    }
+    .brand-symbol svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .brand-name { display: block; overflow: hidden; font-size: 15px; font-weight: 850; letter-spacing: .075em; text-overflow: ellipsis; white-space: nowrap; }
+    .brand-caption { display: block; margin-top: 2px; color: #a1a1b0; font-size: 8px; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; }
+    .workspace-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 27px 0 23px;
+      padding: 10px;
+      border: 1px solid #333440;
+      border-radius: 10px;
+      background: #22232e;
+      color: white;
+      text-align: left;
+    }
+    .workspace-icon { width: 30px; height: 30px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 9px; background: #383044; color: #c8baff; font-size: 11px; font-weight: 800; }
+    .workspace-info { min-width: 0; flex: 1; }
+    .workspace-info strong, .workspace-info small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .workspace-info strong { font-size: 10px; }
+    .workspace-info small { margin-top: 2px; color: var(--sidebar-muted); font-size: 9px; }
+    .sidebar-section { margin: 0 0 8px 10px; color: #858694; font-size: 9px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+    .side-nav { display: grid; gap: 4px; }
+    .nav-item {
+      width: 100%;
+      min-height: 41px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 11px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #a5a6b2;
+      font-size: 11px;
+      font-weight: 570;
+      text-align: left;
+      transition: background .18s ease, color .18s ease;
+    }
+    .nav-item:hover { background: #252631; color: white; }
+    .nav-item.active { background: #302a4e; color: #c6baff; font-weight: 700; }
+    .nav-item .icon { width: 16px; height: 16px; }
+    .nav-badge { margin-left: auto; padding: 2px 6px; border-radius: 10px; background: #343541; color: #bbbcc7; font-size: 8px; }
+    .sidebar-spacer { flex: 1; }
+    .sidebar-card { margin: 14px 2px 13px; padding: 13px; border: 1px solid #373442; border-radius: 11px; background: linear-gradient(145deg, #292536, #22232e); }
+    .sidebar-card-top { display: flex; align-items: center; gap: 7px; color: #d7ceff; font-size: 9px; font-weight: 700; }
+    .sidebar-card-top .icon { width: 14px; height: 14px; }
+    .sidebar-card p { margin: 7px 0 10px; color: #a7a5b2; font-size: 9px; line-height: 1.55; }
+    .sidebar-card button { padding: 0; border: 0; background: none; color: #c8bbff; font-size: 9px; font-weight: 750; }
+    .profile { display: flex; align-items: center; gap: 9px; padding: 13px 3px 0; border-top: 1px solid #343540; }
+    .profile-avatar { width: 31px; height: 31px; display: grid; flex: 0 0 auto; place-items: center; border: 1px solid #55515e; border-radius: 50%; background: #ded8f4; color: #42396c; font-size: 10px; font-weight: 800; }
+    .profile-info { min-width: 0; flex: 1; }
+    .profile-info strong, .profile-info small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .profile-info strong { font-size: 10px; }
+    .profile-info small { margin-top: 2px; color: #a1a1af; font-size: 9px; }
+    .sidebar-backdrop { display: none; }
+
+    .main { min-height: 100vh; margin-left: var(--sidebar-width); }
+    .topbar {
+      position: sticky;
+      z-index: 25;
+      top: 0;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 0 clamp(20px, 3.4vw, 46px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(16px);
+    }
+    .topbar-left, .topbar-right { display: flex; align-items: center; gap: 13px; }
+    .topbar-right { gap: 10px; }
+    .mobile-brand { display: inline-flex; align-items: center; gap: 8px; margin-right: 5px; }
+    .mobile-brand .brand-symbol { width: 29px; height: 29px; border-radius: 9px; }
+    .mobile-brand .brand-symbol svg { width: 19px; height: 19px; }
+    .mobile-brand .brand-name { color: var(--ink); font-size: 11px; letter-spacing: .055em; }
+    .page-context { color: var(--muted); font-size: 10px; }
+    .page-context strong { color: var(--ink); font-weight: 700; }
+    .top-search { position: relative; width: min(230px, 24vw); }
+    .top-search .icon { position: absolute; top: 50%; left: 11px; width: 15px; height: 15px; color: #999ba6; transform: translateY(-50%); }
+    .top-search input { width: 100%; height: 35px; padding: 0 37px; border: 1px solid var(--line); border-radius: 9px; background: #fafafd; color: var(--ink); font-size: 10px; }
+    .top-search input::placeholder { color: #a1a2ad; }
+    .search-shortcut { position: absolute; top: 50%; right: 8px; padding: 2px 5px; border: 1px solid var(--line); border-radius: 4px; color: #9a9ba6; font-size: 8px; transform: translateY(-50%); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .theme-toggle {
+      min-width: 73px;
+      height: 35px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 9px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      transition: border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease;
+    }
+    .theme-toggle:hover { transform: translateY(-1px); border-color: #bdb4f4; color: var(--purple); }
+    .theme-toggle .icon { width: 15px; height: 15px; color: var(--purple); }
+    .top-action {
+      width: 35px;
+      height: 35px;
+      position: relative;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--surface);
+      color: var(--muted);
+      transition: color .18s, border-color .18s, background .18s;
+    }
+    .top-action:hover { border-color: #d5d0fb; background: var(--purple-soft); color: var(--purple); }
+    .top-action .icon { width: 16px; height: 16px; }
+    .notification-dot { position: absolute; top: 7px; right: 7px; width: 6px; height: 6px; border: 1px solid white; border-radius: 50%; background: var(--red); }
+    .header-profile { width: 33px; height: 33px; display: grid; flex: 0 0 auto; place-items: center; border: 2px solid var(--surface); border-radius: 50%; background: #dcd7f1; box-shadow: 0 0 0 1px var(--line); color: #483c7f; font-size: 9px; font-weight: 800; }
+    .mobile-menu { display: none; width: 36px; height: 36px; flex: 0 0 auto; place-items: center; border: 1px solid var(--line); border-radius: 9px; background: white; }
+    button:not(:disabled) { transition-property: transform, color, background-color, border-color, box-shadow, opacity; transition-duration: .18s; transition-timing-function: ease; }
+    button:not(:disabled):active { transform: scale(.97); }
+    button:disabled { cursor: not-allowed; opacity: .55; }
+
+    .content { width: min(1440px, 100%); margin: 0 auto; padding: 27px clamp(20px, 3.4vw, 46px) 48px; }
+    .view { display: none; animation: panel-in .22s ease both; }
+    .view.active { display: block; }
+    @keyframes panel-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 21px; }
+    .heading-copy { min-width: 0; }
+    .eyebrow { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .page-heading h1 { margin: 4px 0 3px; font-size: clamp(22px, 2.4vw, 29px); line-height: 1.2; letter-spacing: -.055em; }
+    .page-heading p { margin: 0; color: var(--muted); font-size: 10px; }
+    .heading-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .date-select, .select-control {
+      height: 35px;
+      padding: 0 29px 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      appearance: none;
+      background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23898b99' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
+      color: #555764;
+      font-size: 10px;
+    }
+    .btn {
+      min-height: 35px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 10px;
+      font-weight: 700;
+      transition: transform .16s, color .16s, border-color .16s, background .16s, box-shadow .16s;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: #d2cdfa; color: var(--purple); box-shadow: 0 4px 13px rgba(37,34,65,.06); }
+    .btn .icon { width: 14px; height: 14px; }
+    .btn-primary { border-color: var(--purple); background: var(--purple); color: white; }
+    .btn-primary:hover { border-color: var(--purple-dark); background: var(--purple-dark); color: white; }
+    .btn-quiet { border-color: transparent; background: transparent; }
+    .live-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border: 1px solid #dcefe8; border-radius: 20px; background: #f2faf6; color: #318b6d; font-size: 8px; font-weight: 750; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #3aba86; box-shadow: 0 0 0 3px rgba(58,186,134,.13); animation: pulse 2s infinite; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 5px rgba(58,186,134,0); } }
+    .demo-note { display: inline-flex; align-items: center; gap: 6px; margin-left: 9px; color: #9698a3; font-size: 9px; }
+    .demo-note .icon { width: 12px; height: 12px; }
+
+    .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; }
+    .metric-card { min-width: 0; padding: 16px 16px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 3px 12px rgba(37,35,55,.018); transition: transform .18s, box-shadow .18s; }
+    .metric-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .metric-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .metric-label { overflow: hidden; color: #777987; font-size: 10px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+    .metric-icon { width: 30px; height: 30px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 9px; background: var(--purple-soft); color: var(--purple); }
+    .metric-icon .icon { width: 15px; height: 15px; }
+    .metric-card:nth-child(2) .metric-icon { background: var(--mint-soft); color: var(--mint); }
+    .metric-card:nth-child(3) .metric-icon { background: var(--orange-soft); color: var(--orange); }
+    .metric-card:nth-child(4) .metric-icon { background: var(--blue-soft); color: var(--blue); }
+    .metric-number-row { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; }
+    .metric-number { overflow: hidden; font-size: clamp(21px, 2.2vw, 27px); font-weight: 760; letter-spacing: -.065em; text-overflow: ellipsis; white-space: nowrap; }
+    .metric-change { flex: 0 0 auto; color: #29956f; font-size: 9px; font-weight: 750; }
+    .metric-caption { margin-top: 3px; color: #9a9ca5; font-size: 9px; }
+    .sparkline { width: 100%; height: 29px; display: block; margin-top: 8px; overflow: visible; }
+    .sparkline path { fill: none; stroke: var(--purple); stroke-width: 2; stroke-linecap: round; }
+    .metric-card:nth-child(2) .sparkline path { stroke: var(--mint); }
+    .metric-card:nth-child(3) .sparkline path { stroke: var(--orange); }
+    .metric-card:nth-child(4) .sparkline path { stroke: var(--blue); }
+    .metric-card.live-metric .metric-number { color: #202b27; }
+    .metric-card.live-metric .metric-caption { display: flex; align-items: center; gap: 5px; }
+    .metric-card.live-metric .live-dot { width: 5px; height: 5px; }
+
+    .dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.72fr) minmax(255px, .92fr); gap: 14px; margin-top: 15px; }
+    .panel { min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 3px 12px rgba(37,35,55,.018); }
+    .panel-header { min-height: 57px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f0f0f4; }
+    .panel-title { min-width: 0; }
+    .panel-title h2 { overflow: hidden; margin: 0; font-size: 12px; font-weight: 750; letter-spacing: -.02em; text-overflow: ellipsis; white-space: nowrap; }
+    .panel-title p { margin: 3px 0 0; color: #999ba5; font-size: 9px; }
+    .panel-body { padding: 15px 16px; }
+    .chart-controls { display: flex; align-items: center; gap: 6px; }
+    .chart-select { height: 30px; font-size: 9px; }
+    .chart-toggle { height: 29px; display: inline-flex; align-items: center; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 7px; background: #fafafd; }
+    .chart-type { height: 21px; display: grid; place-items: center; padding: 0 6px; border: 0; border-radius: 5px; background: transparent; color: #989aa5; }
+    .chart-type[aria-pressed="true"] { background: white; color: var(--purple); box-shadow: 0 1px 4px #201d3718; }
+    .chart-type .icon { width: 13px; height: 13px; }
+    .chart-summary { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+    .chart-current { display: flex; align-items: baseline; gap: 9px; }
+    .chart-current strong { font-size: 21px; letter-spacing: -.06em; }
+    .chart-current span { color: #2e9a72; font-size: 9px; font-weight: 700; }
+    .legend { display: flex; align-items: center; gap: 14px; color: #777986; font-size: 8px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 5px; }
+    .legend-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--purple); }
+    .legend-dot.secondary { background: #b9b1f5; }
+    .chart-svg { width: 100%; height: 205px; display: block; overflow: visible; }
+    .chart-gridline { stroke: #f0f0f4; stroke-width: 1; }
+    .chart-label { fill: #a0a1ab; font-size: 9px; font-family: inherit; }
+    .chart-area { fill: url(#chart-gradient); }
+    .chart-line { fill: none; stroke: var(--purple); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .chart-secondary { fill: none; stroke: #c5bef7; stroke-width: 2; stroke-dasharray: 4 5; stroke-linecap: round; stroke-linejoin: round; }
+    .chart-point { fill: white; stroke: var(--purple); stroke-width: 2.5; }
+    .bar-group { fill: var(--purple); }
+    .bar-secondary { fill: #d7d1fc; }
+    .chart-tooltip { position: absolute; z-index: 2; display: none; padding: 6px 9px; border: 1px solid var(--line); border-radius: 7px; background: white; box-shadow: var(--shadow); color: var(--ink); font-size: 9px; pointer-events: none; }
+    .chart-footer { display: flex; justify-content: space-between; gap: 10px; padding-top: 7px; border-top: 1px solid #f3f3f6; color: #9698a2; font-size: 8px; }
+
+    .channel-list { display: grid; gap: 15px; }
+    .channel-row { display: grid; grid-template-columns: minmax(76px, .82fr) 1.2fr auto; align-items: center; gap: 9px; }
+    .channel-name { display: flex; align-items: center; gap: 7px; overflow: hidden; color: #656773; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+    .channel-icon { width: 22px; height: 22px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 7px; background: #f0edff; color: var(--purple); font-size: 9px; font-weight: 800; }
+    .channel-row:nth-child(2) .channel-icon { background: #eef4ff; color: #5085dd; }
+    .channel-row:nth-child(3) .channel-icon { background: #fff2e6; color: #d98944; }
+    .channel-row:nth-child(4) .channel-icon { background: #eaf7f1; color: #379675; }
+    .channel-track { height: 6px; overflow: hidden; border-radius: 10px; background: #f0f0f4; }
+    .channel-fill { height: 100%; display: block; border-radius: inherit; background: var(--purple); }
+    .channel-row:nth-child(2) .channel-fill { background: var(--blue); }
+    .channel-row:nth-child(3) .channel-fill { background: var(--orange); }
+    .channel-row:nth-child(4) .channel-fill { background: var(--mint); }
+    .channel-value { color: #454650; font-size: 9px; font-weight: 750; text-align: right; }
+    .channel-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 19px; padding-top: 12px; border-top: 1px solid #f0f0f4; color: #9698a2; font-size: 8px; }
+    .channel-footer strong { color: #51535e; font-size: 9px; }
+
+    .lower-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr); gap: 14px; margin-top: 14px; }
+    .table-wrap { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { padding: 10px 15px; border-bottom: 1px solid #f0f0f4; color: #999ba5; font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .055em; white-space: nowrap; }
+    td { padding: 11px 15px; border-bottom: 1px solid #f3f3f6; color: #696b76; font-size: 9px; white-space: nowrap; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .campaign-name { display: flex; align-items: center; gap: 8px; color: #343540; font-size: 9px; font-weight: 700; }
+    .campaign-mark { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 7px; background: var(--purple-soft); color: var(--purple); font-size: 8px; font-weight: 800; }
+    .status { display: inline-flex; align-items: center; gap: 5px; padding: 3px 7px; border-radius: 14px; background: #edf8f2; color: #398a68; font-size: 8px; font-weight: 700; }
+    .status::before { width: 5px; height: 5px; border-radius: 50%; background: currentColor; content: ""; }
+    .status.paused { background: #f2f2f5; color: #858793; }
+    .status.review { background: #fff5e8; color: #bd7d32; }
+    .table-link { display: flex; justify-content: center; padding: 3px 0 12px; color: var(--purple); font-size: 9px; font-weight: 700; }
+    .activity-list { display: grid; }
+    .activity { display: grid; grid-template-columns: 28px minmax(0,1fr) auto; align-items: start; gap: 9px; padding: 11px 0; border-bottom: 1px solid #f2f2f5; }
+    .activity:first-child { padding-top: 1px; }
+    .activity:last-child { padding-bottom: 0; border-bottom: 0; }
+    .activity-icon { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 8px; background: var(--purple-soft); color: var(--purple); }
+    .activity-icon .icon { width: 14px; height: 14px; }
+    .activity:nth-child(2) .activity-icon { background: var(--mint-soft); color: var(--mint); }
+    .activity:nth-child(3) .activity-icon { background: var(--orange-soft); color: var(--orange); }
+    .activity-copy { min-width: 0; color: #656773; font-size: 9px; line-height: 1.45; }
+    .activity-copy strong { color: #373843; font-weight: 700; }
+    .activity-copy small { display: block; margin-top: 3px; color: #a1a2ab; font-size: 8px; }
+    .activity-time { color: #a3a4ad; font-size: 8px; white-space: nowrap; }
+
+    .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; margin: 26px 0 13px; }
+    .section-heading h2 { margin: 0; font-size: 13px; letter-spacing: -.025em; }
+    .section-heading p { margin: 3px 0 0; color: var(--muted); font-size: 9px; }
+    .report-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(270px, .75fr); align-items: start; gap: 14px; }
+    .report-list { display: grid; }
+    .report-row { display: grid; grid-template-columns: 33px minmax(0,1fr) auto auto; align-items: center; gap: 11px; padding: 13px 0; border-bottom: 1px solid #f1f1f4; }
+    .report-row:last-child { border-bottom: 0; }
+    .report-icon { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; background: var(--purple-soft); color: var(--purple); }
+    .report-icon .icon { width: 16px; height: 16px; }
+    .report-row:nth-child(2) .report-icon { background: var(--blue-soft); color: var(--blue); }
+    .report-row:nth-child(3) .report-icon { background: var(--mint-soft); color: var(--mint); }
+    .report-row:nth-child(4) .report-icon { background: var(--orange-soft); color: var(--orange); }
+    .report-meta { min-width: 0; }
+    .report-meta strong { display: block; overflow: hidden; color: #393a45; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+    .report-meta small { display: block; margin-top: 3px; color: #999ba4; font-size: 8px; }
+    .report-updated { color: #8c8e99; font-size: 8px; white-space: nowrap; }
+    .report-download { width: 29px; height: 29px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 7px; background: white; color: #777987; }
+    .report-download .icon { width: 14px; height: 14px; }
+    .report-download:hover { border-color: #d5d0fb; color: var(--purple); }
+    .export-panel { position: sticky; top: 83px; }
+    .export-panel .panel-body { padding: 16px; }
+    .form-label { display: block; margin-bottom: 7px; color: #646672; font-size: 9px; font-weight: 700; }
+    .export-panel .select-control { width: 100%; margin-bottom: 15px; }
+    .check-list { display: grid; gap: 11px; margin: 0 0 17px; padding: 0; border: 0; }
+    .check-list legend { margin-bottom: 10px; color: #646672; font-size: 9px; font-weight: 700; }
+    .check-row { display: flex; align-items: center; gap: 8px; color: #626470; font-size: 9px; cursor: pointer; }
+    .check-row input { width: 14px; height: 14px; margin: 0; accent-color: var(--purple); }
+    .export-panel .btn { width: 100%; }
+    .export-hint { margin: 9px 0 0; color: #999ba4; font-size: 8px; line-height: 1.5; }
+    .toast { position: fixed; z-index: 80; right: 22px; bottom: 20px; max-width: min(370px, calc(100vw - 32px)); display: flex; align-items: center; gap: 9px; padding: 12px 15px; border: 1px solid #dfeee7; border-radius: 10px; background: #f7fffa; box-shadow: var(--shadow); color: #327956; font-size: 10px; font-weight: 650; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s, transform .2s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast .icon { width: 15px; height: 15px; }
+    .empty-note { padding: 20px; color: var(--muted); font-size: 10px; text-align: center; }
+    .privacy-note { display: flex; align-items: flex-start; gap: 8px; margin-top: 14px; padding: 11px 12px; border: 1px solid #e8e8ed; border-radius: 10px; background: #fafafd; color: #777986; font-size: 8px; line-height: 1.5; }
+    .privacy-note .icon { width: 14px; height: 14px; color: #65896f; }
+
+    :root[data-theme="dark"] body { color-scheme: dark; }
+    :root[data-theme="dark"] .topbar { border-color: var(--line); background: rgba(25,26,36,.9); }
+    :root[data-theme="dark"] .mobile-menu,
+    :root[data-theme="dark"] .top-search input,
+    :root[data-theme="dark"] .btn,
+    :root[data-theme="dark"] .report-download { border-color: var(--line); background-color: var(--surface-soft); color: var(--ink); }
+    :root[data-theme="dark"] .top-search input { background: #20212b; }
+    :root[data-theme="dark"] .top-search input::placeholder,
+    :root[data-theme="dark"] .search-shortcut { color: #a0a1ae; }
+    :root[data-theme="dark"] .btn:hover,
+    :root[data-theme="dark"] .report-download:hover { border-color: #6b5ec2; background-color: #302b48; color: #c6bbff; }
+    :root[data-theme="dark"] .btn-primary,
+    :root[data-theme="dark"] .btn-primary:hover { border-color: var(--purple); background: var(--purple); color: #171522; }
+    :root[data-theme="dark"] .btn-quiet { border-color: transparent; background: transparent; color: var(--muted); }
+    :root[data-theme="dark"] .btn-quiet:hover { background: var(--surface-soft); color: var(--purple); }
+    :root[data-theme="dark"] .top-action:hover { border-color: #6b5ec2; background: #302b48; }
+    :root[data-theme="dark"] .notification-dot { border-color: var(--surface); }
+    :root[data-theme="dark"] .header-profile { border-color: var(--surface); }
+    :root[data-theme="dark"] .date-select,
+    :root[data-theme="dark"] .select-control { border-color: var(--line); color: var(--ink); }
+    :root[data-theme="dark"] .metric-label,
+    :root[data-theme="dark"] .panel-title p,
+    :root[data-theme="dark"] .channel-name,
+    :root[data-theme="dark"] .activity-copy,
+    :root[data-theme="dark"] .form-label,
+    :root[data-theme="dark"] .check-list legend,
+    :root[data-theme="dark"] .check-row { color: #b7b7c3; }
+    :root[data-theme="dark"] .metric-card.live-metric .metric-number,
+    :root[data-theme="dark"] .channel-value,
+    :root[data-theme="dark"] .channel-footer strong,
+    :root[data-theme="dark"] .campaign-name,
+    :root[data-theme="dark"] .activity-copy strong,
+    :root[data-theme="dark"] .report-meta strong { color: var(--ink); }
+    :root[data-theme="dark"] .panel-header,
+    :root[data-theme="dark"] .channel-footer,
+    :root[data-theme="dark"] th,
+    :root[data-theme="dark"] td,
+    :root[data-theme="dark"] .activity,
+    :root[data-theme="dark"] .report-row { border-color: #30323e; }
+    :root[data-theme="dark"] .chart-gridline { stroke: #30323e; }
+    :root[data-theme="dark"] .chart-toggle { border-color: var(--line); background: #222430; }
+    :root[data-theme="dark"] .chart-type[aria-pressed="true"] { background: #39344f; color: #d1c8ff; box-shadow: none; }
+    :root[data-theme="dark"] .chart-label { fill: #a1a2b1; }
+    :root[data-theme="dark"] .channel-track { background: #30323e; }
+    :root[data-theme="dark"] th { color: #a5a6b1; }
+    :root[data-theme="dark"] td { color: #b8b8c4; }
+    :root[data-theme="dark"] .status.paused { background: #30313b; color: #b3b4be; }
+    :root[data-theme="dark"] .status.review { background: #3c3023; color: #f0bc78; }
+    :root[data-theme="dark"] .status:not(.paused):not(.review) { background: #20372f; color: #78d6af; }
+    :root[data-theme="dark"] .live-badge { border-color: #2b493e; background: #1e302a; color: #80d7b6; }
+    :root[data-theme="dark"] .privacy-note { border-color: var(--line); background: #20212b; color: #b6b7c2; }
+    :root[data-theme="dark"] .toast { border-color: #355340; background: #1f3028; color: #9fe0bb; }
+    :root[data-theme="dark"] .sidebar { background: #14151d; }
+
+    .workspace-button:hover { border-color: #5b536f; background: #292a36; }
+    .nav-item:focus-visible, .sidebar-card button:focus-visible { outline-color: #aa9bff; }
+    .report-row { transition: background-color .18s ease; }
+    .report-row:hover { background: var(--surface-soft); }
+    .metric-card, .panel, .btn, .top-action, .theme-toggle, .report-download { transition-timing-function: cubic-bezier(.2,.7,.2,1); }
+    :root[data-theme="dark"] .report-row:hover { background: #222430; }
+
+    .preloader[hidden] { display: none; }
+    .preloader {
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: #171922;
+      color: white;
+      opacity: 1;
+      transition: opacity .42s ease, visibility .42s ease;
+    }
+    .preloader.leaving { visibility: hidden; opacity: 0; pointer-events: none; }
+    .loader-inner { display: grid; justify-items: center; text-align: center; }
+    .loader-symbol { width: 76px; height: 76px; position: relative; display: grid; place-items: center; margin-bottom: 21px; border: 1px solid rgba(191,180,255,.35); border-radius: 23px; background: linear-gradient(145deg,#8272fa,#5545cc); box-shadow: 0 0 60px rgba(111,92,232,.28); animation: loader-bob 1.3s ease-in-out infinite alternate; }
+    .loader-symbol::before { position: absolute; inset: -9px; border: 1px solid rgba(186,174,255,.24); border-radius: 29px; animation: loader-spin 8s linear infinite; content: ""; }
+    .loader-symbol svg { width: 47px; height: 47px; fill: none; stroke: white; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .loader-name { font-size: 19px; font-weight: 850; letter-spacing: .13em; }
+    .loader-caption { margin-top: 5px; color: #aaa9b7; font-size: 8px; font-weight: 650; letter-spacing: .2em; text-transform: uppercase; }
+    .loader-track { width: 142px; height: 2px; overflow: hidden; margin-top: 24px; border-radius: 2px; background: #373843; }
+    .loader-progress { width: 45%; height: 100%; border-radius: inherit; background: #a79aff; animation: loader-progress 1s ease-in-out infinite; }
+    @keyframes loader-spin { to { transform: rotate(360deg); } }
+    @keyframes loader-bob { to { transform: translateY(-5px); } }
+    @keyframes loader-progress { from { transform: translateX(-120%); } to { transform: translateX(320%); } }
+
+    @media (min-width: 1440px) {
+      .metric-card { padding: 18px 19px 15px; }
+      .chart-svg { height: 225px; }
+    }
+    @media (max-width: 1120px) {
+      :root { --sidebar-width: 220px; }
+      .sidebar { padding-inline: 12px; }
+      .content { padding-inline: 23px; }
+      .topbar { padding-inline: 23px; }
+      .dashboard-grid { grid-template-columns: minmax(0, 1.5fr) minmax(235px, .9fr); }
+      .metric-grid { gap: 9px; }
+      .metric-card { padding: 13px; }
+      .lower-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 820px) {
+      :root { --sidebar-width: 248px; }
+      .sidebar { transform: translateX(-102%); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-backdrop { position: fixed; z-index: 35; inset: 0; display: block; background: rgba(18,18,28,.42); opacity: 0; pointer-events: none; transition: opacity .22s; }
+      .sidebar-backdrop.open { opacity: 1; pointer-events: auto; }
+      .main { margin-left: 0; }
+      .mobile-menu { display: grid; }
+      .mobile-brand { display: inline-flex; align-items: center; gap: 8px; margin-right: 5px; }
+      .mobile-brand .brand-symbol { width: 29px; height: 29px; border-radius: 9px; }
+      .mobile-brand .brand-symbol svg { width: 19px; height: 19px; }
+      .mobile-brand .brand-name { color: var(--ink); font-size: 11px; letter-spacing: .055em; }
+      .page-context { display: none; }
+      .topbar-left { gap: 9px; }
+      .dashboard-grid { grid-template-columns: minmax(0, 1.4fr) minmax(220px, .85fr); }
+      .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metric-number { font-size: 24px; }
+    }
+    @media (max-width: 640px) {
+      .topbar { min-height: 61px; gap: 8px; padding-inline: 14px; }
+      .topbar-right { gap: 7px; }
+      .top-search { width: min(190px, 35vw); }
+      .top-search input { height: 33px; }
+      .header-profile { width: 31px; height: 31px; }
+      .top-action { width: 33px; height: 33px; }
+      .theme-toggle { min-width: 35px; width: 35px; height: 33px; padding: 0; }
+      .theme-label { display: none; }
+      .content { padding: 22px 14px 35px; }
+      .page-heading { align-items: flex-start; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+      .heading-actions { width: 100%; }
+      .heading-actions .date-select { flex: 1; }
+      .dashboard-grid { grid-template-columns: minmax(0,1fr); gap: 12px; margin-top: 12px; }
+      .lower-grid { gap: 12px; margin-top: 12px; }
+      .chart-svg { height: 185px; }
+      .report-layout { grid-template-columns: minmax(0,1fr); }
+      .export-panel { position: static; }
+      .report-updated { display: none; }
+      .report-row { grid-template-columns: 33px minmax(0,1fr) auto; }
+      .demo-note { margin: 6px 0 0; }
+      .panel-header { padding-inline: 13px; }
+      .panel-body { padding-inline: 13px; }
+    }
+    @media (max-width: 420px) {
+      .mobile-brand .brand-caption { display: none; }
+      .mobile-brand .brand-name { font-size: 8px; }
+      .mobile-brand .brand-symbol { width: 26px; height: 26px; }
+      .mobile-brand { gap: 5px; margin-right: 0; }
+      .mobile-menu { width: 32px; height: 32px; }
+      .topbar-left { gap: 6px; }
+      .topbar-right { gap: 5px; }
+      .top-search { width: min(30vw, 100px); }
+      .top-search input { padding-left: 30px; padding-right: 6px; }
+      .search-shortcut { display: none; }
+      .header-profile { display: none; }
+      .theme-toggle { width: 32px; min-width: 32px; height: 32px; }
+      .top-action { width: 32px; height: 32px; }
+      .metric-grid { gap: 8px; }
+      .metric-card { padding: 12px 11px; }
+      .metric-label { font-size: 9px; }
+      .metric-number { font-size: 21px; }
+      .metric-change { font-size: 8px; }
+      .chart-controls { gap: 4px; }
+      .chart-select { max-width: 110px; padding-left: 8px; }
+      .chart-current strong { font-size: 19px; }
+      .chart-svg { height: 155px; }
+      .channel-row { grid-template-columns: 87px minmax(40px,1fr) auto; gap: 6px; }
+      .channel-name { font-size: 8px; }
+      .dashboard-grid .panel-header { gap: 5px; }
+      .chart-toggle { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden">
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="5" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="11.5" width="7" height="9" rx="1.5"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19V5m0 14h17M7 15l4-4 3 2 6-7"/><path d="M16 6h4v4"/></symbol>
+    <symbol id="i-campaign" viewBox="0 0 24 24"><path d="M4 8.5v7h4l8 4v-15l-8 4H4Z"/><path d="m8 15.5 1.5 5h4L11 17m5-7.5a4 4 0 0 1 0 5"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.8 20c.5-3.4 2.6-5.3 6.2-5.3s5.8 1.9 6.2 5.3"/><path d="M16 4.8a3.3 3.3 0 0 1 0 6.4m2.3 3.6c1.7.7 2.6 2.3 2.9 4.7"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M13.5 3.5H6a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10Z"/><path d="M13 3.5V10h7M8 14h8m-8 4h8"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.3 1-1.5 2.6-1.6-.6a8 8 0 0 1-1.7 1l-.3 1.7h-3l-.3-1.7a8 8 0 0 1-1.7-1l-1.6.6-1.5-2.6 1.3-1a7 7 0 0 1 0-2l-1.3-1 1.5-2.6 1.6.6a8 8 0 0 1 1.7-1l.3-1.7h3l.3 1.7a8 8 0 0 1 1.7 1l1.6-.6 1.5 2.6-1.3 1a7 7 0 0 1-.1 2Z" transform="translate(-1 -1) scale(1.08)"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 13h4"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7.5 3v4m9-4v4m-13 3h17"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 17v3h16v-3"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17 9 11l4 4 8-9"/><path d="M15 6h6v6"/></symbol>
+    <symbol id="i-dollar" viewBox="0 0 24 24"><path d="M12 2.8v18.4m5-14.4c-.8-1.6-2.4-2.4-5-2.4-3 0-5 1.4-5 3.5 0 5.5 10 2.5 10 7.8 0 2.1-2 3.7-5 3.7-2.6 0-4.6-.9-5.5-2.8"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12s3.2-6 9.5-6 9.5 6 9.5 6-3.2 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8L12 3Z"/><path d="m19 15 .9 2.6L22.5 18.5l-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9L19 15Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3m-4 5v2"/></symbol>
+    <symbol id="i-bars" viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 15.1A8.5 8.5 0 0 1 8.9 3.5 8.5 8.5 0 1 0 20.5 15.1Z"/></symbol>
+  </svg>
+
+  <div class="preloader" id="preloader" role="status" aria-label="Loading NOVA333X dashboard" hidden>
+    <div class="loader-inner">
+      <div class="loader-symbol" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="m7 33 12-22 8 15 7-12 8 19M11 33h27"/></svg></div>
+      <div class="loader-name">NOVA333X</div>
+      <div class="loader-caption">Agency intelligence</div>
+      <div class="loader-track" aria-hidden="true"><div class="loader-progress"></div></div>
+    </div>
+  </div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview" aria-label="NOVA333X dashboard home">
+        <span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="m7 33 12-22 8 15 7-12 8 19M11 33h27"/></svg></span>
+        <span><span class="brand-name">NOVA333X</span><span class="brand-caption">Digital agency studio</span></span>
+      </a>
+      <button class="workspace-button" type="button" aria-label="Current workspace: Nova Creative Studio">
+        <span class="workspace-icon">N</span><span class="workspace-info"><strong>Nova Creative Studio</strong><small>Agency workspace</small></span>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 10 4 4 4-4"/></svg>
+      </button>
+      <div class="sidebar-section">Workspace</div>
+      <nav class="side-nav" aria-label="Dashboard sections">
+        <button class="nav-item active" type="button" data-view="overview" aria-current="page"><svg class="icon"><use href="#i-grid"/></svg> Overview</button>
+        <button class="nav-item" type="button" data-view="campaigns"><svg class="icon"><use href="#i-campaign"/></svg> Campaigns <span class="nav-badge">12</span></button>
+        <button class="nav-item" type="button" data-view="audience"><svg class="icon"><use href="#i-users"/></svg> Audience</button>
+        <button class="nav-item" type="button" data-view="reports"><svg class="icon"><use href="#i-file"/></svg> Reports</button>
+      </nav>
+      <div class="sidebar-section" style="margin-top:25px">Preferences</div>
+      <nav class="side-nav" aria-label="Preferences">
+        <button class="nav-item" type="button" data-view="settings"><svg class="icon"><use href="#i-settings"/></svg> Settings</button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-card">
+        <div class="sidebar-card-top"><svg class="icon"><use href="#i-spark"/></svg> Studio insights</div>
+        <p>Bring your campaign data together to uncover the next opportunity.</p>
+        <button type="button" data-view-link="reports">Explore reporting <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="profile">
+        <span class="profile-avatar" aria-hidden="true">AC</span>
+        <span class="profile-info"><strong>Alex Carter</strong><small>Studio administrator</small></span>
+        <button class="top-action" id="sidebar-account-button" type="button" aria-label="Open account settings"><svg class="icon"><use href="#i-dots"/></svg></button>
+      </div>
+    </aside>
+    <button class="sidebar-backdrop" id="sidebar-backdrop" type="button" aria-label="Close navigation" tabindex="-1"></button>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu" id="mobile-menu" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"><svg class="icon"><use href="#i-grid"/></svg></button>
+          <a class="mobile-brand" href="#overview" aria-label="NOVA333X dashboard home">
+            <span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="m7 33 12-22 8 15 7-12 8 19M11 33h27"/></svg></span>
+            <span class="brand-name">NOVA333X</span>
+          </a>
+          <div class="page-context">Studio <span aria-hidden="true">/</span> <strong id="breadcrumb">Overview</strong></div>
+        </div>
+        <div class="topbar-right">
+          <div class="top-search">
+            <svg class="icon"><use href="#i-search"/></svg>
+            <input id="dashboard-search" type="search" aria-label="Search campaigns and reports" placeholder="Search anything..." autocomplete="off">
+            <span class="search-shortcut" aria-hidden="true">Ctrl K</span>
+          </div>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
+            <svg class="icon" aria-hidden="true"><use id="theme-icon" href="#i-moon"/></svg>
+            <span class="theme-label" id="theme-label">Dark</span>
+          </button>
+          <button class="top-action" id="notification-button" type="button" aria-label="Notifications"><svg class="icon"><use href="#i-bell"/></svg><span class="notification-dot"></span></button>
+          <button class="header-profile" id="header-profile" type="button" aria-label="Open Alex Carter account settings">AC</button>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="view active" id="overview" data-view-panel="overview" aria-labelledby="overview-title">
+          <div class="page-heading">
+            <div class="heading-copy">
+              <div class="eyebrow"><span id="today-day">Monday</span>, <span id="today-date">September 16, 2026</span></div>
+              <h1 id="overview-title">Good morning, Alex <span aria-hidden="true">✦</span></h1>
+              <p>Here's the latest on your studio's performance.</p>
+              <span class="demo-note"><svg class="icon"><use href="#i-eye"/></svg> Illustrative demo data · not connected to live accounts</span>
+            </div>
+            <div class="heading-actions">
+              <label class="sr-only" for="overview-range">Reporting period</label>
+              <select class="date-select" id="overview-range" data-range-select>
+                <option value="7">Last 7 days</option>
+                <option value="30" selected>Last 30 days</option>
+                <option value="90">Last 90 days</option>
+              </select>
+              <button class="btn" type="button" data-view-link="reports"><svg class="icon"><use href="#i-download"/></svg> Export report</button>
+            </div>
+          </div>
+
+          <div class="metric-grid" aria-label="Performance metrics">
+            <article class="metric-card">
+              <div class="metric-top"><span class="metric-label">Total revenue</span><span class="metric-icon"><svg class="icon"><use href="#i-dollar"/></svg></span></div>
+              <div class="metric-number-row"><strong class="metric-number" data-metric="revenue">$84,254</strong><span class="metric-change" data-change="revenue">↗ 18.6%</span></div>
+              <div class="metric-caption">Compared to previous period</div>
+              <svg class="sparkline" viewBox="0 0 150 29" preserveAspectRatio="none" aria-hidden="true"><path d="M1 23 C13 19 14 24 27 16S40 19 51 12 65 18 76 10 91 15 103 8 117 13 130 5 140 9 149 2"/></svg>
+            </article>
+            <article class="metric-card">
+              <div class="metric-top"><span class="metric-label">Campaign reach</span><span class="metric-icon"><svg class="icon"><use href="#i-eye"/></svg></span></div>
+              <div class="metric-number-row"><strong class="metric-number" data-metric="reach">1.28M</strong><span class="metric-change" data-change="reach">↗ 12.4%</span></div>
+              <div class="metric-caption">Across all active channels</div>
+              <svg class="sparkline" viewBox="0 0 150 29" preserveAspectRatio="none" aria-hidden="true"><path d="M1 24 C12 20 17 21 27 15S41 21 53 12 67 15 78 8 91 13 103 10 119 14 128 6 140 10 149 3"/></svg>
+            </article>
+            <article class="metric-card">
+              <div class="metric-top"><span class="metric-label">Conversions</span><span class="metric-icon"><svg class="icon"><use href="#i-target"/></svg></span></div>
+              <div class="metric-number-row"><strong class="metric-number" data-metric="conversions">3,642</strong><span class="metric-change" data-change="conversions">↗ 8.2%</span></div>
+              <div class="metric-caption">At 4.82% average conversion</div>
+              <svg class="sparkline" viewBox="0 0 150 29" preserveAspectRatio="none" aria-hidden="true"><path d="M1 22 C13 16 16 21 29 18S42 10 53 14 65 7 77 13 90 8 102 9 116 5 129 8 139 2 149 4"/></svg>
+            </article>
+            <article class="metric-card live-metric">
+              <div class="metric-top"><span class="metric-label">Active visitors</span><span class="metric-icon"><svg class="icon"><use href="#i-users"/></svg></span></div>
+              <div class="metric-number-row"><strong class="metric-number" id="live-visitors" aria-live="polite">127</strong><span class="metric-change">Live</span></div>
+              <div class="metric-caption"><span class="live-dot" aria-hidden="true"></span> Updating every few seconds</div>
+              <svg class="sparkline" viewBox="0 0 150 29" preserveAspectRatio="none" aria-hidden="true"><path d="M1 17 C12 13 17 20 27 11S41 15 51 13 63 21 77 10 91 15 103 7 117 12 128 9 141 16 149 4"/></svg>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel" aria-labelledby="performance-title">
+              <div class="panel-header">
+                <div class="panel-title"><h2 id="performance-title">Performance overview</h2><p>Track performance across your studio</p></div>
+                <div class="chart-controls">
+                  <label class="sr-only" for="chart-metric">Chart metric</label>
+                  <select class="date-select chart-select" id="chart-metric">
+                    <option value="revenue">Revenue</option><option value="reach">Reach</option><option value="conversions">Conversions</option>
+                  </select>
+                  <div class="chart-toggle" role="group" aria-label="Chart display">
+                    <button class="chart-type" type="button" data-chart-type="line" aria-label="Line chart" aria-pressed="true"><svg class="icon"><use href="#i-trend"/></svg></button>
+                    <button class="chart-type" type="button" data-chart-type="bar" aria-label="Bar chart" aria-pressed="false"><svg class="icon"><use href="#i-bars"/></svg></button>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="chart-summary"><div class="chart-current"><strong id="chart-total">$84,254</strong><span id="chart-change">↗ 18.6%</span></div><div class="legend"><span class="legend-item"><i class="legend-dot"></i><span id="legend-primary">Revenue</span></span><span class="legend-item"><i class="legend-dot secondary"></i> Previous period</span></div></div>
+                <svg class="chart-svg" id="performance-chart" viewBox="0 0 720 230" role="img" aria-label="Revenue trend chart for the last 30 days" preserveAspectRatio="none">
+                  <defs><linearGradient id="chart-gradient" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#8172ed" stop-opacity=".19"/><stop offset="100%" stop-color="#8172ed" stop-opacity="0"/></linearGradient></defs>
+                  <g id="chart-grid">
+                    <path class="chart-gridline" d="M55 20H710M55 65H710M55 110H710M55 155H710M55 200H710"/>
+                    <text class="chart-label" x="0" y="23">$100k</text><text class="chart-label" x="7" y="68">$75k</text><text class="chart-label" x="7" y="113">$50k</text><text class="chart-label" x="7" y="158">$25k</text><text class="chart-label" x="30" y="203">$0</text>
+                  </g>
+                  <g id="chart-bars"></g>
+                  <path class="chart-area" id="chart-area" d="M55 160 C100 144 119 147 155 132S224 142 259 108 328 118 364 94 432 106 470 76 537 91 574 58 640 64 710 27V200H55Z"/>
+                  <path class="chart-secondary" id="chart-previous" d="M55 169 C100 163 120 170 155 153S224 157 259 139 328 146 364 125 432 137 470 108 537 121 574 98 640 102 710 72"/>
+                  <path class="chart-line" id="chart-line" d="M55 160 C100 144 119 147 155 132S224 142 259 108 328 118 364 94 432 106 470 76 537 91 574 58 640 64 710 27"/>
+                  <circle class="chart-point" id="chart-point" cx="710" cy="27" r="4.5"/>
+                  <g id="chart-x-labels"><text class="chart-label" x="55" y="224">Sep 1</text><text class="chart-label" x="205" y="224">Sep 8</text><text class="chart-label" x="356" y="224">Sep 15</text><text class="chart-label" x="510" y="224">Sep 22</text><text class="chart-label" x="668" y="224">Sep 30</text></g>
+                </svg>
+                <div class="chart-footer"><span>Source: demo campaign data</span><span id="chart-period-label">Last 30 days</span></div>
+              </div>
+            </section>
+            <section class="panel" aria-labelledby="channels-title">
+              <div class="panel-header"><div class="panel-title"><h2 id="channels-title">Channel performance</h2><p>Revenue contribution by source</p></div><button class="btn btn-quiet" type="button" data-view-link="campaigns">Details <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+              <div class="panel-body">
+                <div class="channel-list">
+                  <div class="channel-row"><span class="channel-name"><i class="channel-icon">S</i> Social ads</span><span class="channel-track"><i class="channel-fill" style="width:76%"></i></span><span class="channel-value">34.8%</span></div>
+                  <div class="channel-row"><span class="channel-name"><i class="channel-icon">G</i> Search</span><span class="channel-track"><i class="channel-fill" style="width:61%"></i></span><span class="channel-value">27.2%</span></div>
+                  <div class="channel-row"><span class="channel-name"><i class="channel-icon">E</i> Email</span><span class="channel-track"><i class="channel-fill" style="width:42%"></i></span><span class="channel-value">19.1%</span></div>
+                  <div class="channel-row"><span class="channel-name"><i class="channel-icon">O</i> Organic</span><span class="channel-track"><i class="channel-fill" style="width:31%"></i></span><span class="channel-value">12.6%</span></div>
+                </div>
+                <div class="channel-footer"><span>Other channels</span><strong>6.3%</strong></div>
+              </div>
+            </section>
+          </div>
+
+          <div class="lower-grid">
+            <section class="panel" aria-labelledby="campaigns-table-title">
+              <div class="panel-header"><div class="panel-title"><h2 id="campaigns-table-title">Top campaigns</h2><p>Performance snapshot · this period</p></div><button class="btn btn-quiet" type="button" data-view-link="campaigns">View all <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Campaign</th><th>Status</th><th>Reach</th><th>Conversions</th><th>Revenue</th></tr></thead>
+                  <tbody>
+                    <tr><td><span class="campaign-name"><i class="campaign-mark">A</i> Autumn launch</span></td><td><span class="status">Active</span></td><td>248.6k</td><td>842</td><td>$24,860</td></tr>
+                    <tr><td><span class="campaign-name"><i class="campaign-mark">B</i> Brand awareness</span></td><td><span class="status">Active</span></td><td>186.2k</td><td>614</td><td>$18,320</td></tr>
+                    <tr><td><span class="campaign-name"><i class="campaign-mark">R</i> Retargeting Q3</span></td><td><span class="status review">Review</span></td><td>92.4k</td><td>533</td><td>$16,910</td></tr>
+                    <tr><td><span class="campaign-name"><i class="campaign-mark">N</i> Newsletter drive</span></td><td><span class="status paused">Paused</span></td><td>74.8k</td><td>392</td><td>$11,480</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <button class="table-link" type="button" data-view-link="campaigns">Open campaign report <span aria-hidden="true">→</span></button>
+            </section>
+            <section class="panel" aria-labelledby="activity-title">
+              <div class="panel-header"><div class="panel-title"><h2 id="activity-title">Studio activity</h2><p>Recent reporting updates</p></div><span class="live-badge"><i class="live-dot"></i> Live</span></div>
+              <div class="panel-body">
+                <div class="activity-list">
+                  <div class="activity"><span class="activity-icon"><svg class="icon"><use href="#i-trend"/></svg></span><span class="activity-copy"><strong>Autumn launch</strong> passed its conversion goal.<small>Campaign milestone</small></span><time class="activity-time">8 min ago</time></div>
+                  <div class="activity"><span class="activity-icon"><svg class="icon"><use href="#i-file"/></svg></span><span class="activity-copy"><strong>Weekly performance</strong> report is ready to export.<small>Report generated</small></span><time class="activity-time">32 min ago</time></div>
+                  <div class="activity"><span class="activity-icon"><svg class="icon"><use href="#i-users"/></svg></span><span class="activity-copy"><strong>Audience overview</strong> refreshed with new segments.<small>Audience insights</small></span><time class="activity-time">1 hr ago</time></div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-campaigns" data-view-panel="campaigns" aria-labelledby="campaigns-title" aria-hidden="true">
+          <div class="page-heading"><div class="heading-copy"><div class="eyebrow">Performance workspace</div><h1 id="campaigns-title">Campaigns</h1><p>Monitor campaign delivery and compare the results that matter.</p><span class="demo-note"><svg class="icon"><use href="#i-eye"/></svg> Illustrative demo data · not connected to live accounts</span></div><div class="heading-actions"><select class="date-select" aria-label="Campaign reporting period" data-range-select><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option></select><button class="btn btn-primary" type="button" data-view-link="reports"><svg class="icon"><use href="#i-download"/></svg> Create report</button></div></div>
+          <div class="metric-grid" aria-label="Campaign metrics"><article class="metric-card"><div class="metric-top"><span class="metric-label">Active campaigns</span><span class="metric-icon"><svg class="icon"><use href="#i-campaign"/></svg></span></div><div class="metric-number-row"><strong class="metric-number">12</strong><span class="metric-change">↗ 3 new</span></div><div class="metric-caption">Across 4 channels</div></article><article class="metric-card"><div class="metric-top"><span class="metric-label">Total impressions</span><span class="metric-icon"><svg class="icon"><use href="#i-eye"/></svg></span></div><div class="metric-number-row"><strong class="metric-number" data-metric="reach">1.28M</strong><span class="metric-change" data-change="reach">↗ 12.4%</span></div><div class="metric-caption">Compared to previous period</div></article><article class="metric-card"><div class="metric-top"><span class="metric-label">Conversions</span><span class="metric-icon"><svg class="icon"><use href="#i-target"/></svg></span></div><div class="metric-number-row"><strong class="metric-number" data-metric="conversions">3,642</strong><span class="metric-change" data-change="conversions">↗ 8.2%</span></div><div class="metric-caption">Across all campaigns</div></article><article class="metric-card"><div class="metric-top"><span class="metric-label">Avg. return on ad spend</span><span class="metric-icon"><svg class="icon"><use href="#i-dollar"/></svg></span></div><div class="metric-number-row"><strong class="metric-number">4.82×</strong><span class="metric-change">↗ 0.6×</span></div><div class="metric-caption">Revenue per ad dollar</div></article></div>
+          <section class="panel" style="margin-top:15px" aria-labelledby="all-campaigns-title"><div class="panel-header"><div class="panel-title"><h2 id="all-campaigns-title">All campaigns</h2><p>Detailed campaign performance</p></div><button class="btn" type="button" data-view-link="reports"><svg class="icon"><use href="#i-download"/></svg> Export data</button></div><div class="table-wrap"><table><thead><tr><th>Campaign</th><th>Channel</th><th>Status</th><th>Reach</th><th>Clicks</th><th>Conversions</th><th>Revenue</th></tr></thead><tbody><tr><td><span class="campaign-name"><i class="campaign-mark">A</i> Autumn launch</span></td><td>Social ads</td><td><span class="status">Active</span></td><td>248.6k</td><td>18,642</td><td>842</td><td>$24,860</td></tr><tr><td><span class="campaign-name"><i class="campaign-mark">B</i> Brand awareness</span></td><td>Search</td><td><span class="status">Active</span></td><td>186.2k</td><td>12,309</td><td>614</td><td>$18,320</td></tr><tr><td><span class="campaign-name"><i class="campaign-mark">R</i> Retargeting Q3</span></td><td>Social ads</td><td><span class="status review">Review</span></td><td>92.4k</td><td>8,092</td><td>533</td><td>$16,910</td></tr><tr><td><span class="campaign-name"><i class="campaign-mark">N</i> Newsletter drive</span></td><td>Email</td><td><span class="status paused">Paused</span></td><td>74.8k</td><td>6,814</td><td>392</td><td>$11,480</td></tr><tr><td><span class="campaign-name"><i class="campaign-mark">F</i> Fall collection</span></td><td>Organic</td><td><span class="status">Active</span></td><td>63.5k</td><td>5,208</td><td>318</td><td>$8,720</td></tr></tbody></table></div></section>
+        </section>
+
+        <section class="view" id="view-audience" data-view-panel="audience" aria-labelledby="audience-title" aria-hidden="true">
+          <div class="page-heading"><div class="heading-copy"><div class="eyebrow">People & segments</div><h1 id="audience-title">Audience</h1><p>Understand who you reach, how they engage, and where they convert.</p><span class="demo-note"><svg class="icon"><use href="#i-eye"/></svg> Illustrative demo data · not connected to live accounts</span></div><div class="heading-actions"><select class="date-select" aria-label="Audience reporting period" data-range-select><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option></select><button class="btn" type="button" data-view-link="reports"><svg class="icon"><use href="#i-download"/></svg> Export audience</button></div></div>
+          <div class="metric-grid" aria-label="Audience metrics"><article class="metric-card"><div class="metric-top"><span class="metric-label">Unique visitors</span><span class="metric-icon"><svg class="icon"><use href="#i-users"/></svg></span></div><div class="metric-number-row"><strong class="metric-number" data-metric="reach">1.28M</strong><span class="metric-change" data-change="reach">↗ 12.4%</span></div><div class="metric-caption">Across all active channels</div></article><article class="metric-card"><div class="metric-top"><span class="metric-label">Returning visitors</span><span class="metric-icon"><svg class="icon"><use href="#i-trend"/></svg></span></div><div class="metric-number-row"><strong class="metric-number">38.4%</strong><span class="metric-change">↗ 4.1%</span></div><div class="metric-caption">Of total audience</div></article><article class="metric-card"><div class="metric-top"><span class="metric-label">Avg. engagement</span><span class="metric-icon"><svg class="icon"><use href="#i-eye"/></svg></span></div><div class="metric-number-row"><strong class="metric-number">2m 48s</strong><span class="metric-change">↗ 0.3%</span></div><div class="metric-caption">Time per session</div></article><article class="metric-card"><div class="metric-top"><span class="metric-label">Audience growth</span><span class="metric-icon"><svg class="icon"><use href="#i-trend"/></svg></span></div><div class="metric-number-row"><strong class="metric-number">+14.2%</strong><span class="metric-change">↗ 2.8%</span></div><div class="metric-caption">Compared to previous period</div></article></div>
+          <div class="dashboard-grid"><section class="panel"><div class="panel-header"><div class="panel-title"><h2>Audience segments</h2><p>Illustrative distribution by customer group</p></div></div><div class="panel-body"><div class="channel-list"><div class="channel-row"><span class="channel-name"><i class="channel-icon">N</i> New visitors</span><span class="channel-track"><i class="channel-fill" style="width:72%"></i></span><span class="channel-value">42.8%</span></div><div class="channel-row"><span class="channel-name"><i class="channel-icon">R</i> Returning</span><span class="channel-track"><i class="channel-fill" style="width:58%"></i></span><span class="channel-value">34.6%</span></div><div class="channel-row"><span class="channel-name"><i class="channel-icon">E</i> Engaged</span><span class="channel-track"><i class="channel-fill" style="width:37%"></i></span><span class="channel-value">22.1%</span></div><div class="channel-row"><span class="channel-name"><i class="channel-icon">C</i> Converted</span><span class="channel-track"><i class="channel-fill" style="width:19%"></i></span><span class="channel-value">11.3%</span></div></div></div></section><section class="panel"><div class="panel-header"><div class="panel-title"><h2>Audience snapshot</h2><p>Top attributes this reporting period</p></div></div><div class="panel-body"><div class="activity-list"><div class="activity"><span class="activity-icon"><svg class="icon"><use href="#i-users"/></svg></span><span class="activity-copy"><strong>Top location</strong> United States<small>38% of sessions</small></span></div><div class="activity"><span class="activity-icon"><svg class="icon"><use href="#i-calendar"/></svg></span><span class="activity-copy"><strong>Peak activity</strong> Weekdays, 10 am–2 pm<small>Based on sample session data</small></span></div><div class="activity"><span class="activity-icon"><svg class="icon"><use href="#i-campaign"/></svg></span><span class="activity-copy"><strong>Top source</strong> Organic search<small>42% of first visits</small></span></div></div></div></section></div>
+        </section>
+
+        <section class="view" id="view-reports" data-view-panel="reports" aria-labelledby="reports-title" aria-hidden="true">
+          <div class="page-heading"><div class="heading-copy"><div class="eyebrow">Reporting center</div><h1 id="reports-title">Reports & exports</h1><p>Choose the data and format for your next client-ready report.</p><span class="demo-note"><svg class="icon"><use href="#i-eye"/></svg> Sample data · exports are generated in this browser</span></div><div class="heading-actions"><span class="live-badge"><i class="live-dot"></i> Workspace ready</span></div></div>
+          <div class="report-layout">
+            <section class="panel" aria-labelledby="saved-reports-title">            <div class="panel-header"><div class="panel-title"><h2 id="saved-reports-title">Recent reports</h2><p>Your studio's reporting library</p></div><button class="btn" type="button" data-export="all"><svg class="icon"><use href="#i-download"/></svg> Export full report</button></div><div class="panel-body"><div class="report-list">
+              <div class="report-row"><span class="report-icon"><svg class="icon"><use href="#i-chart"/></svg></span><span class="report-meta"><strong>Monthly performance overview</strong><small>Overview · PDF-ready data</small></span><span class="report-updated">Today, 9:42 am</span><button class="report-download" type="button" data-export="overview" aria-label="Export monthly performance overview"><svg class="icon"><use href="#i-download"/></svg></button></div>
+              <div class="report-row"><span class="report-icon"><svg class="icon"><use href="#i-campaign"/></svg></span><span class="report-meta"><strong>Campaign performance</strong><small>Campaigns · All channels</small></span><span class="report-updated">Yesterday</span><button class="report-download" type="button" data-export="campaigns" aria-label="Export campaign performance"><svg class="icon"><use href="#i-download"/></svg></button></div>
+              <div class="report-row"><span class="report-icon"><svg class="icon"><use href="#i-users"/></svg></span><span class="report-meta"><strong>Audience & acquisition</strong><small>Audience · Segments and sources</small></span><span class="report-updated">Sep 14, 2026</span><button class="report-download" type="button" data-export="audience" aria-label="Export audience and acquisition"><svg class="icon"><use href="#i-download"/></svg></button></div>
+              <div class="report-row"><span class="report-icon"><svg class="icon"><use href="#i-trend"/></svg></span><span class="report-meta"><strong>Channel attribution</strong><small>Channels · Revenue breakdown</small></span><span class="report-updated">Sep 12, 2026</span><button class="report-download" type="button" data-export="channels" aria-label="Export channel attribution"><svg class="icon"><use href="#i-download"/></svg></button></div>
+            </div></div></section>
+            <section class="panel export-panel" aria-labelledby="export-title"><div class="panel-header"><div class="panel-title"><h2 id="export-title">Build a report</h2><p>Customize your export</p></div><span class="metric-icon"><svg class="icon"><use href="#i-file"/></svg></span></div><div class="panel-body">
+              <label class="form-label" for="export-period">Reporting period</label>
+              <select class="select-control" id="export-period"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option></select>
+              <fieldset class="check-list"><legend>Include in report</legend>
+                <label class="check-row"><input type="checkbox" name="report-section" value="overview" checked> Performance overview</label>
+                <label class="check-row"><input type="checkbox" name="report-section" value="campaigns" checked> Campaign results</label>
+                <label class="check-row"><input type="checkbox" name="report-section" value="channels" checked> Channel breakdown</label>
+                <label class="check-row"><input type="checkbox" name="report-section" value="audience"> Audience metrics</label>
+              </fieldset>
+              <label class="form-label" for="export-format">File format</label>
+              <select class="select-control" id="export-format"><option value="csv" selected>CSV spreadsheet (.csv)</option><option value="json">JSON data (.json)</option></select>
+              <button class="btn btn-primary" id="generate-export" type="button"><svg class="icon"><use href="#i-download"/></svg> Generate & download</button>
+              <p class="export-hint">The selected sample data is formatted and downloaded locally in your browser. No report is sent to a server.</p>
+            </div></section>
+          </div>
+          <div class="privacy-note"><svg class="icon"><use href="#i-lock"/></svg><span><strong>Local demo workspace.</strong> This prototype uses illustrative figures only. Exported files are created on this device; no account, client, or campaign information is transmitted.</span></div>
+        </section>
+
+        <section class="view" id="view-settings" data-view-panel="settings" aria-labelledby="settings-title" aria-hidden="true">
+          <div class="page-heading"><div class="heading-copy"><div class="eyebrow">Studio workspace</div><h1 id="settings-title">Settings</h1><p>Workspace preferences for your NOVA333X analytics demo.</p></div></div>
+          <div class="report-layout"><section class="panel"><div class="panel-header"><div class="panel-title"><h2>Workspace details</h2><p>Current local prototype configuration</p></div></div><div class="panel-body"><div class="activity-list"><div class="activity"><span class="activity-icon"><svg class="icon"><use href="#i-grid"/></svg></span><span class="activity-copy"><strong>Workspace</strong> Nova Creative Studio<small>Digital agency studio</small></span></div><div class="activity"><span class="activity-icon"><svg class="icon"><use href="#i-file"/></svg></span><span class="activity-copy"><strong>Report exports</strong> CSV and JSON<small>Generated locally in your browser</small></span></div><div class="activity"><span class="activity-icon"><svg class="icon"><use href="#i-lock"/></svg></span><span class="activity-copy"><strong>Data mode</strong> Illustrative sample data<small>No connected accounts or external services</small></span></div></div></div></section><section class="panel"><div class="panel-header"><div class="panel-title"><h2>Privacy & security</h2><p>Prototype behavior</p></div></div><div class="panel-body"><div class="privacy-note" style="margin-top:0"><svg class="icon"><use href="#i-lock"/></svg><span>This standalone dashboard does not collect credentials, connect to external services, or transmit your report selections. It is a frontend prototype, not an authenticated or production data platform.</span></div></div></section></div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"><svg class="icon"><use href="#i-check"/></svg><span id="toast-message">Report exported.</span></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+      const icons = {
+        overview: ["Revenue", "$84,254", "18.6%", [12, 18, 14, 25, 20, 33, 29, 42, 37, 54, 51, 65, 60, 75]],
+        reach: ["Reach", "1.28M", "12.4%", [16, 13, 22, 18, 27, 24, 34, 30, 43, 40, 50, 46, 60, 66]],
+        conversions: ["Conversions", "3,642", "8.2%", [11, 17, 15, 20, 25, 22, 33, 29, 37, 41, 46, 44, 58, 64]]
+      };
+      const series = {
+        revenue: {
+          label: "Revenue", total: { 7: "$22,406", 30: "$84,254", 90: "$248,910" },
+          growth: "18.6%", unit: "$", scale: 100000,
+          values: [38, 44, 40, 53, 49, 61, 58, 71, 66, 77, 73, 88, 83, 96],
+          previous: [33, 39, 37, 45, 43, 50, 47, 58, 55, 62, 60, 70, 67, 76]
+        },
+        reach: {
+          label: "Reach", total: { 7: "312.8k", 30: "1.28M", 90: "3.74M" },
+          growth: "12.4%", unit: "", scale: 1500000,
+          values: [34, 40, 37, 51, 46, 58, 55, 68, 62, 76, 72, 83, 80, 93],
+          previous: [30, 36, 34, 42, 40, 48, 46, 55, 52, 61, 58, 67, 63, 75]
+        },
+        conversions: {
+          label: "Conversions", total: { 7: "948", 30: "3,642", 90: "10,824" },
+          growth: "8.2%", unit: "", scale: 5000,
+          values: [30, 36, 35, 44, 40, 55, 50, 59, 57, 68, 64, 77, 72, 89],
+          previous: [26, 32, 29, 38, 36, 44, 41, 51, 49, 58, 55, 64, 62, 72]
+        }
+      };
+      const campaigns = [
+        { name: "Autumn launch", channel: "Social ads", status: "Active", reach: 248600, clicks: 18642, conversions: 842, revenue: 24860 },
+        { name: "Brand awareness", channel: "Search", status: "Active", reach: 186200, clicks: 12309, conversions: 614, revenue: 18320 },
+        { name: "Retargeting Q3", channel: "Social ads", status: "Review", reach: 92400, clicks: 8092, conversions: 533, revenue: 16910 },
+        { name: "Newsletter drive", channel: "Email", status: "Paused", reach: 74800, clicks: 6814, conversions: 392, revenue: 11480 },
+        { name: "Fall collection", channel: "Organic", status: "Active", reach: 63500, clicks: 5208, conversions: 318, revenue: 8720 }
+      ];
+      const reportRows = {
+        overview: [
+          ["Metric", "Value", "Change"],
+          ["Total revenue", "$84,254", "+18.6%"],
+          ["Campaign reach", "1.28M", "+12.4%"],
+          ["Conversions", "3,642", "+8.2%"],
+          ["Active visitors", "127", "Live demo"]
+        ],
+        campaigns: [
+          ["Campaign", "Channel", "Status", "Reach", "Clicks", "Conversions", "Revenue"],
+          ...campaigns.map((item) => [item.name, item.channel, item.status, item.reach, item.clicks, item.conversions, `$${item.revenue}`])
+        ],
+        channels: [
+          ["Channel", "Revenue contribution"],
+          ["Social ads", "34.8%"], ["Search", "27.2%"], ["Email", "19.1%"], ["Organic", "12.6%"], ["Other", "6.3%"]
+        ],
+        audience: [
+          ["Audience segment", "Share"],
+          ["New visitors", "42.8%"], ["Returning", "34.6%"], ["Engaged", "22.1%"], ["Converted", "11.3%"]
+        ]
+      };
+      const rangeLabels = { 7: "Last 7 days", 30: "Last 30 days", 90: "Last 90 days" };
+      const metricValues = {
+        revenue: { 7: 22406, 30: 84254, 90: 248910 },
+        reach: { 7: 312800, 30: 1280000, 90: 3740000 },
+        conversions: { 7: 948, 30: 3642, 90: 10824 }
+      };
+      const sidebar = $("#sidebar");
+      const backdrop = $("#sidebar-backdrop");
+      const menuButton = $("#mobile-menu");
+      const themeToggle = $("#theme-toggle");
+      const views = $$("[data-view-panel]");
+      const navItems = $$(".nav-item[data-view]");
+      const toast = $("#toast");
+      const chartSvg = $("#performance-chart");
+      const svgNS = "http://www.w3.org/2000/svg";
+      let activeRange = "30";
+      let activeMetric = "revenue";
+      let chartType = "line";
+      let toastTimer;
+      let liveTimer;
+      let visitorCount = 127;
+      let themePersistenceAvailable = true;
+
+      function applyTheme(theme, persist = false) {
+        if (theme !== "light" && theme !== "dark") return;
+        const isDark = theme === "dark";
+        document.documentElement.dataset.theme = theme;
+        themeToggle.setAttribute("aria-pressed", String(isDark));
+        themeToggle.setAttribute("aria-label", `Switch to ${isDark ? "light" : "dark"} mode`);
+        themeToggle.title = `Switch to ${isDark ? "light" : "dark"} mode`;
+        $("#theme-label").textContent = isDark ? "Light" : "Dark";
+        $("#theme-icon").setAttribute("href", isDark ? "#i-sun" : "#i-moon");
+        $('meta[name="theme-color"]').content = isDark ? "#12131a" : "#f6f7fa";
+        if (persist && themePersistenceAvailable) {
+          try {
+            window.localStorage.setItem("nova333x-theme", theme);
+          } catch (error) {
+            if (error instanceof DOMException && (error.name === "SecurityError" || error.name === "QuotaExceededError")) {
+              themePersistenceAvailable = false;
+              showToast("Theme changed, but this browser blocked saving your preference.");
+            } else {
+              throw error;
+            }
+          }
+        }
+      }
+
+      function getInitialTheme() {
+        try {
+          const savedTheme = window.localStorage.getItem("nova333x-theme");
+          if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
+        } catch (error) {
+          if (error instanceof DOMException && error.name === "SecurityError") {
+            themePersistenceAvailable = false;
+          } else {
+            throw error;
+          }
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+
+      function showToast(message) {
+        $("#toast-message").textContent = message;
+        toast.classList.add("show");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => toast.classList.remove("show"), 3000);
+      }
+
+      function setSidebarOpen(open) {
+        sidebar.classList.toggle("open", open);
+        backdrop.classList.toggle("open", open);
+        menuButton.setAttribute("aria-expanded", String(open));
+        menuButton.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+        document.body.style.overflow = open ? "hidden" : "";
+      }
+
+      function switchView(name) {
+        const target = views.find((view) => view.dataset.viewPanel === name);
+        if (!target) return;
+        for (const view of views) {
+          const isActive = view === target;
+          view.classList.toggle("active", isActive);
+          view.setAttribute("aria-hidden", String(!isActive));
+        }
+        for (const item of navItems) {
+          const isActive = item.dataset.view === name;
+          item.classList.toggle("active", isActive);
+          if (isActive) item.setAttribute("aria-current", "page");
+          else item.removeAttribute("aria-current");
+        }
+        $("#breadcrumb").textContent = name.charAt(0).toUpperCase() + name.slice(1);
+        setSidebarOpen(false);
+        window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      }
+
+      function updateMetricCards() {
+        const formatters = {
+          revenue: (value) => `$${Math.round(value).toLocaleString("en-US")}`,
+          reach: (value) => `${(value / 1000000).toFixed(2)}M`,
+          conversions: (value) => Math.round(value).toLocaleString("en-US")
+        };
+        for (const key of Object.keys(metricValues)) {
+          const value = formatters[key](metricValues[key][activeRange]);
+          $$(`[data-metric="${key}"]`).forEach((node) => { node.textContent = value; });
+        }
+        $$(".metric-change[data-change]").forEach((node) => {
+          const change = { revenue: "18.6%", reach: "12.4%", conversions: "8.2%" }[node.dataset.change];
+          node.textContent = `↗ ${change}`;
+        });
+        $("#chart-period-label").textContent = rangeLabels[activeRange];
+        renderChart();
+      }
+
+      function makeSvgElement(tag, attributes = {}) {
+        const element = document.createElementNS(svgNS, tag);
+        for (const [key, value] of Object.entries(attributes)) element.setAttribute(key, String(value));
+        return element;
+      }
+
+      function getChartPoints(values, scaleMin, scaleMax) {
+        const left = 55;
+        const right = 710;
+        const top = 20;
+        const bottom = 200;
+        return values.map((value, index) => ({
+          x: left + (right - left) * index / (values.length - 1),
+          y: bottom - (value - scaleMin) / (scaleMax - scaleMin) * (bottom - top)
+        }));
+      }
+
+      function smoothPath(points) {
+        if (points.length < 2) return "";
+        let path = `M${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+        for (let index = 0; index < points.length - 1; index += 1) {
+          const current = points[index];
+          const next = points[index + 1];
+          const middle = (current.x + next.x) / 2;
+          path += ` C${middle.toFixed(1)} ${current.y.toFixed(1)} ${middle.toFixed(1)} ${next.y.toFixed(1)} ${next.x.toFixed(1)} ${next.y.toFixed(1)}`;
+        }
+        return path;
+      }
+
+      function renderChart() {
+        const data = series[activeMetric];
+        if (!data || !chartSvg) return;
+        const values = data.values.map((value, index) => Math.max(4, Math.min(100, value + (activeRange === "7" ? (index % 2 ? 2 : -1) : activeRange === "90" ? (index % 3 ? 1 : -2) : 0))));
+        const previousValues = data.previous;
+        const allValues = [...values, ...previousValues];
+        const valueRange = Math.max(...allValues) - Math.min(...allValues);
+        const scaleMin = Math.max(0, Math.min(...allValues) - valueRange * .4);
+        const scaleMax = Math.min(110, Math.max(...allValues) + valueRange * .4);
+        const points = getChartPoints(values, scaleMin, scaleMax);
+        const previousPoints = getChartPoints(previousValues, scaleMin, scaleMax);
+        const line = smoothPath(points);
+        const previousLine = smoothPath(previousPoints);
+        const last = points[points.length - 1];
+        const area = `${line} L710 200 L55 200 Z`;
+        const isBar = chartType === "bar";
+
+        $("#chart-total").textContent = data.total[activeRange];
+        $("#chart-change").textContent = `↗ ${data.growth}`;
+        $("#legend-primary").textContent = data.label;
+        chartSvg.setAttribute("aria-label", `${data.label} trend chart for ${rangeLabels[activeRange].toLowerCase()}`);
+        const tickLabels = {
+          revenue: ["$100k", "$75k", "$50k", "$25k", "$0"],
+          reach: ["1.5M", "1.1M", "750k", "375k", "0"],
+          conversions: ["5k", "3.75k", "2.5k", "1.25k", "0"]
+        };
+        $$("#chart-grid text").forEach((label, index) => { label.textContent = tickLabels[activeMetric][index]; });
+        $("#chart-line").setAttribute("d", line);
+        $("#chart-previous").setAttribute("d", previousLine);
+        $("#chart-area").setAttribute("d", area);
+        $("#chart-point").setAttribute("cx", last.x);
+        $("#chart-point").setAttribute("cy", last.y);
+        const chartVisibility = isBar ? "none" : "inline";
+        $("#chart-line").setAttribute("display", chartVisibility);
+        $("#chart-previous").setAttribute("display", chartVisibility);
+        $("#chart-area").setAttribute("display", chartVisibility);
+        $("#chart-point").setAttribute("display", chartVisibility);
+        $("#chart-bars").setAttribute("display", isBar ? "inline" : "none");
+        $("#chart-x-labels").replaceChildren();
+
+        const labelCount = 5;
+        for (let index = 0; index < labelCount; index += 1) {
+          const x = 55 + (655 * index / (labelCount - 1));
+          const date = new Date();
+          date.setDate(date.getDate() - Number(activeRange) + Math.round(Number(activeRange) * index / (labelCount - 1)));
+          const label = makeSvgElement("text", { x: x - 13, y: 224, class: "chart-label" });
+          label.textContent = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+          $("#chart-x-labels").append(label);
+        }
+
+        const bars = $("#chart-bars");
+        bars.replaceChildren();
+        if (isBar) {
+          values.forEach((value, index) => {
+            const x = 58 + index * 46;
+            const height = 28 + value * 1.38;
+            const previousHeight = 28 + previousValues[index] * 1.38;
+            bars.append(
+              makeSvgElement("rect", { x: x + 3, y: 200 - height, width: 18, height, rx: 4, class: "bar-group" }),
+              makeSvgElement("rect", { x: x + 23, y: 200 - previousHeight, width: 13, height: previousHeight, rx: 4, class: "bar-secondary" })
+            );
+          });
+        }
+      }
+
+      function updateRange(value) {
+        if (!(value in rangeLabels)) return;
+        activeRange = value;
+        $$("[data-range-select]").forEach((select) => { select.value = value; });
+        updateMetricCards();
+      }
+
+      function csvCell(value) {
+        const string = String(value);
+        return `"${string.replace(/"/g, '""')}"`;
+      }
+
+      function downloadFile(filename, contents, type) {
+        const blob = new Blob([contents], { type });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        link.hidden = true;
+        document.body.append(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      function exportReport(section, format) {
+        const keys = Array.isArray(section) ? section : section === "all" ? Object.keys(reportRows) : [section];
+        const available = keys.filter((key) => Object.hasOwn(reportRows, key));
+        if (!available.length) {
+          showToast("Choose at least one report section to export.");
+          return;
+        }
+        const period = rangeLabels[activeRange];
+        const filenameBase = `nova333x-${available.length > 1 ? "custom-" : ""}report-${activeRange}-days`;
+        if (format === "json") {
+          const report = {
+            brand: "NOVA333X",
+            period,
+            generatedAt: new Date().toISOString(),
+            demo: true,
+            sections: Object.fromEntries(available.map((key) => [key, reportRows[key].slice(1).map((row) => Object.fromEntries(reportRows[key][0].map((heading, index) => [heading, row[index]])))]))
+          };
+          downloadFile(`${filenameBase}.json`, JSON.stringify(report, null, 2), "application/json;charset=utf-8");
+        } else {
+          const rows = [["NOVA333X Studio Report", period], []];
+          for (const key of available) {
+            rows.push([key.charAt(0).toUpperCase() + key.slice(1)]);
+            rows.push(...reportRows[key]);
+            rows.push([]);
+          }
+          const csv = `\uFEFF${rows.map((row) => row.map(csvCell).join(",")).join("\r\n")}`;
+          downloadFile(`${filenameBase}.csv`, csv, "text/csv;charset=utf-8");
+        }
+        showToast(`${available.length} report section${available.length === 1 ? "" : "s"} exported as ${format.toUpperCase()}.`);
+      }
+
+      for (const item of navItems) item.addEventListener("click", () => switchView(item.dataset.view));
+      $$("[data-view-link]").forEach((button) => button.addEventListener("click", () => switchView(button.dataset.viewLink)));
+      menuButton.addEventListener("click", () => setSidebarOpen(menuButton.getAttribute("aria-expanded") !== "true"));
+      backdrop.addEventListener("click", () => setSidebarOpen(false));
+      themeToggle.addEventListener("click", () => {
+        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true);
+      });
+      $(".workspace-button").addEventListener("click", () => showToast("Nova Creative Studio is the only workspace in this demo."));
+      $("#sidebar-account-button").addEventListener("click", () => {
+        switchView("settings");
+        showToast("Account preferences are available in Settings.");
+      });
+      $("#header-profile").addEventListener("click", () => {
+        switchView("settings");
+        showToast("Account preferences are available in Settings.");
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setSidebarOpen(false);
+        if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+          event.preventDefault();
+          $("#dashboard-search").focus();
+        }
+      });
+
+      $$("[data-range-select]").forEach((select) => select.addEventListener("change", () => updateRange(select.value)));
+      $("#chart-metric").addEventListener("change", (event) => {
+        if (Object.hasOwn(series, event.target.value)) {
+          activeMetric = event.target.value;
+          renderChart();
+        }
+      });
+      $$(".chart-type").forEach((button) => button.addEventListener("click", () => {
+        chartType = button.dataset.chartType;
+        $$(".chart-type").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        renderChart();
+      }));
+
+      $("#generate-export").addEventListener("click", () => {
+        const selected = $$('input[name="report-section"]:checked').map((input) => input.value);
+        if (!selected.length) {
+          showToast("Select at least one report section to export.");
+          $('input[name="report-section"]').focus();
+          return;
+        }
+        updateRange($("#export-period").value);
+        exportReport(selected, $("#export-format").value);
+      });
+      $$("[data-export]").forEach((button) => button.addEventListener("click", () => exportReport(button.dataset.export, "csv")));
+      $("#export-period").addEventListener("change", (event) => updateRange(event.target.value));
+
+      $("#notification-button").addEventListener("click", (event) => {
+        $(".notification-dot").hidden = true;
+        event.currentTarget.setAttribute("aria-label", "Notifications, all caught up");
+        showToast("You're all caught up on studio activity.");
+      });
+      $("#dashboard-search").addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && event.currentTarget.value.trim()) {
+          const query = event.currentTarget.value.trim().toLowerCase();
+          const campaign = campaigns.find((item) => item.name.toLowerCase().includes(query));
+          switchView(campaign ? "campaigns" : "reports");
+          showToast(campaign ? `Campaign found: ${campaign.name}` : "Showing the reporting center.");
+        }
+      });
+
+      const dateOptions = { month: "long", day: "numeric", year: "numeric" };
+      applyTheme(getInitialTheme());
+      $("#today-day").textContent = new Date().toLocaleDateString("en-US", { weekday: "long" });
+      $("#today-date").textContent = new Date().toLocaleDateString("en-US", dateOptions);
+      $("#chart-period-label").textContent = rangeLabels[activeRange];
+      renderChart();
+      liveTimer = window.setInterval(() => {
+        visitorCount = Math.max(86, Math.min(169, visitorCount + Math.floor(Math.random() * 9) - 4));
+        $("#live-visitors").textContent = String(visitorCount);
+      }, 4000);
+      void liveTimer;
+
+      const preloader = $("#preloader");
+      preloader.hidden = false;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.setTimeout(() => {
+        preloader.classList.add("leaving");
+        window.setTimeout(() => { preloader.hidden = true; }, reducedMotion ? 20 : 460);
+      }, reducedMotion ? 120 : 1050);
+    })();
+  </script>
+</body>
+</html>
